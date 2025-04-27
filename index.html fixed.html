@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HackDraft</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+
+    body {
+      background-color: #fffffe;
+    }
+
+    nav {
+      width: 100%;
+      height: 80px;
+      background: rgba(36, 138, 255, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 6vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+    }
+
+
+    nav h1 {
+      font-size: clamp(20px, 2.8vw, 40px);
+      color: #fff;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+    }
+
+    nav ul li {
+      display: inline-block;
+      margin: 0 5px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 18px;
+      padding: 8px 15px;
+      border-radius: 5px;
+      transition: 0.5s ease;
+    }
+
+    nav ul li a:hover {
+      background: rgba(119, 137, 149, 0.4);
+    }
+
+    nav ul li .active {
+      background: rgba(129, 137, 149, 0.4);
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10%);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    nav ul.active {
+      display: flex;
+      animation: slideDown 0.3s ease-in-out;
+    }
+
+
+    @media (max-width: 768px) {
+      nav {
+        height: 60px;
+        padding: 0 4vw;
+      }
+
+      nav h1 {
+        font-size: clamp(18px, 5vw, 28px);
+      }
+
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+        background: rgba(36, 138, 255, 0.3);
+        backdrop-filter: blur(8px);
+        padding: 1rem 0;
+        text-align: center;
+      }
+
+      nav ul.active {
+        display: flex;
+        animation: slideDown 0.3s ease-in-out;
+      }
+
+      nav ul li {
+        display: block;
+        margin: 1rem 0;
+      }
+
+      .hamburger {
+        display: block;
+      }
+    }
+
+
+
+    .text-overlay {
+      position: absolute;
+      top: 12%;
+      left: 50%;
+      transform: translate(-50%, -12%);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      width: 90%;
+    }
+
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+
+    video.no-border {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: none;
+    }
+
+    .contact-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .contact-text {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .contact-img {
+      flex: 1;
+      min-width: 250px;
+      text-align: center;
+    }
+
+    .contact-img img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .fade-in.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Fix the text-overlay and buttons sizing on mobile */
+    .text-overlay header h1 {
+      font-size: clamp(30px, 8vw, 60px);
+    }
+
+    .text-overlay header p {
+      font-size: clamp(16px, 4vw, 28px);
+    }
+
+    .text-overlay .buttons a {
+      background-color: #7f7494;
+      color: white;
+      text-decoration: none;
+      border-radius: 0.8rem;
+      display: inline-block;
+      margin: 0.3rem;
+      font-size: 24px;
+      /* Good base size */
+      padding: 0.8rem 2.2rem;
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      .text-overlay .buttons a {
+        font-size: 19px;
+        /* a little smaller on mobile */
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        ;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="fade-in">
+    <h1 class="bounce-twice" style="text-shadow: darkgray;">HackWatsonville</h1>
+    <div class="hamburger" onclick="toggleMenu()">
+      <i class="fa fa-bars"></i>
+    </div>
+    <ul class="fade-in">
+      <li style="text-shadow: gray;"><a href="#home" class="active">Home</a></li>
+      <li style="text-shadow: gray;"><a href="#about">About</a></li>
+      <li style="text-shadow: gray;"><a href="#register">Register</a></li>
+      <li style="text-shadow: gray;"><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="fade-in" class="video-container" id="home">
+    <video class="no-border" autoplay muted loop playsinline style="pointer-events: none;">
+      <source src="assets/Untitled design (1).mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <div class="text-overlay">
+      <header style="color: white;text-shadow: 3px 3px 5px gray; padding: 6rem 2rem; text-align: center">
+        <h1 style="margin-bottom: 1rem">
+          Watsonville High Hackathon
+        </h1>
+        <p style="margin-bottom: 2rem">
+          Innovate. Collaborate. Build the Future.
+        </p>
+        <div class="buttons">
+          <a href="#register">Register Now</a>
+          <a href=" #sponsors">Become a Sponsor</a>
+          <a href=" #about"> Learn More</a>
+        </div>
+      </header>
+    </div>
+  </div>
+  <!-- ===== Hackathon Info Sections ===== -->
+
+  <!-- This is the about section for the Hackaton -->
+
+  <section class="fade-in" style="padding: 3rem 2rem; max-width: 1000px; margin: auto" id="about">
+    <h2 style="color: #2f5a2f; font-size: 3.5rem">About the Event</h2>
+    <br />
+    <p style="font-size: 1.3rem">
+      <strong>HackWatsonville</strong> is Watsonville High School’s first-ever student-led hackathon — a one-day coding
+      competition where
+      creativity meets impact.
+      <br />
+      <br />
+      HackWatsonville brings students from across the Pajaro Valley School District together to solve real-world
+      problems through technology, design, and innovation. Whether you're a coder, designer, writer, or just full of
+      ideas — this event is for you.
+      <br />
+      <br />
+      If you would like an overview of how the event will be organized, <a
+        href="https://docs.google.com/document/d/1unBXO3E1M6kPuoFFw9wCey2i6NQ_NYNgJMUOhtt5mYI/edit?tab=t.0#heading=h.a9ff8vleemf">please
+        click here.</a>
+      <br />
+      <br />
+      <strong style="font-size: 1.5rem;">Event Info -</strong>
+    <ul style="font-size: 1.3rem;">
+      <li>📅 Date: Friday, May 16</li>
+      <li>🕒 Time: 2:15pm - 5:00pm</li>
+      <li>📍 Location: Watsonville High: 250 E Beach St, Watsonville, CA. Room: 703</li>
+      <li>🎓 Open to: All high school students in PVUSD</li>
+      <li>📌Teams: 3-4 students per team</li>
+      <li>🏆 Prizes: Cash, tech gear, and more!</li>
+      <li>💻 Experience: Not required!
+      </li>
+    </ul>
+    </p>
+    <br />
+    <br />
+    <br />
+
+    <!-- This is the prompt that the hackaton will be focused on -->
+
+    <h2 class="fade-in" style="color: #2f5a2f; font-size: 3.6rem">Our prompt -</h2>
+    <br />
+    <p class="fade-in" style="font-size: 1.3rem">
+      "How can we expand the Hispanic community's access to technological
+      resources"
+    </p>
+    <br />
+    <p class="fade-in" style="font-size: 1.3rem">This year’s prompt is more than a question,<strong> it’s a call to
+        action.</strong>
+      Participants will
+      brainstorm, design, and prototype solutions that promote technological resources to empower the Hispanic community
+      with access to tech tools, education, and opportunities.</p>
+  </section>
+
+  <!-- This is the current shedule for the Hackaton (Subject to change)-->
+
+  <section class="fade-in" style="padding: 1rem 2rem; max-width: 1000px; margin: auto" id="schedule">
+    <h2 style="color: #2f5a2f; font-size: 3.6rem">Schedule</h2>
+    <ul style="font-size: 1.6rem">
+      <li>💻 2:15pm: Team Formation & Introduction</li>
+      <li>🚀 2:30pm: Project Building</li>
+      <li>🏆 4:30pm: Presentations & Awards</li>
+    </ul>
+  </section>
+
+  <!-- This is the section for the sponsors (link for the interest form is provided) -->
+
+  <section class="fade-in" style="padding: 3rem 2rem; max-width: 1000px; margin: auto" id="sponsors">
+    <h2 style="color: #2f5a2f; font-size: 3.6rem">Our Sponsors</h2>
+
+    <!-- This is the paragraph under the sponser titile -->
+    <br />
+
+    <p style="font-size: 1.3rem">
+      We're proud to collaborate with community partners who believe in empowering the next generation of innovators.
+      <strong>Sponsorship is more than support</strong> it’s an investment in local youth, equity, and the future of
+      technology. By
+      sponsoring HackWatsonville, <strong>your organization will be showcased as a champion</strong> for education,
+      diversity in tech, and community growth. Whether you're a local business, tech company, or nonprofit, your
+      partnership makes this event possible.
+      <br />
+      <br />
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdFnfdiV_xbRzrbvysNZDClfFjpMTgiyMdf_FxIluNsB1Zm6Q/viewform"
+        target="blank" style="
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #0f3460;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        ">Interested in sponsoring?
+      </a>
+    </p>
+
+    <br />
+    <br />
+
+    <h1>Why Sponsor HackWatsonville?</h1>
+    <br />
+    <ul style="font-size: 1.5rem;">
+      <li>🌟 Promote your brand to hundreds of students, educators, and local families.
+      </li>
+      <li>👩‍💻 Support youth-led innovation focused on solving real-world challenges.
+      </li>
+      <li>📣 Gain visibility in event materials, signage, and press coverage.
+      </li>
+      <li>🧠 Connect with emerging talent and future leaders in tech.
+      </li>
+    </ul>
+    <br />
+    <p style="font-size: 1.5rem;">Reach out to us at jaredesquivel24@gmail.com or <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLSdFnfdiV_xbRzrbvysNZDClfFjpMTgiyMdf_FxIluNsB1Zm6Q/viewform">click
+        here</a>
+      <br />
+      <strong>Let’s build something amazing together!</strong>
+    </p>
+    <br />
+    <h1 style="1.5rem;"> Our current Sponsers: </h1>
+    <p style="font-size: 1.5rem;">Your logo could be here 👇</p>
+
+
+  </section>
+
+  <!-- This is the section for the registration (link for the registration form is not yet provided) -->
+
+  <section class="fade-in" style="padding: 3rem 2rem; max-width: 1000px; margin: auto" id="register">
+    <h2 style="color: #2f5a2f; font-size: 3.6rem">Register</h2>
+    <p style="font-size: 1.3rem">
+
+      <br />
+      <strong style="font-size: 1.5rem;">🛠️ What You’ll Do</strong>
+      <br />
+      <br />
+    <ul style="font-size: 1.3rem;">
+      <li>Team up and meet new people</li>
+      <li>Design and build a creative tech-based solutions</li>
+      <li>Get support from mentors and staff</li>
+      <li>Gain experience, connections—and compete for prizes and community recognition! 👀</li>
+    </ul>
+    <br />
+    <strong style="font-size: 1.5rem;">Who Can Join? </strong>
+    <br />
+    <br />
+    <ul style="font-size: 1.3rem;">
+      <li>✅ Coders 💻</li>
+      <li>✅ Designers 🎨</li>
+      <li>✅ Writers 📝</li>
+      <li>✅ Idea People 💭</li>
+      <li>✅ Artists! 🎨 </li>
+      <li>✅ Anyone with a passion for tech and innovation! 🚀</li>
+    </ul>
+    <br />
+    <p style="font-size: 1.3rem;">Open to High school students from Watsonville and surrounding areas —<strong> No
+        experience?
+        No problem.</strong> Everyone brings something to the table. You don’t need to be an expert—just come ready to
+      learn and
+      collaborate.</p>
+    </p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfbXnYvXf2NTFU4g7Q1AYKHBT2ftVCRlX0ifKoDFsNdDkAjDg/viewform?usp=preview"
+      target="_blank" style="
+          display: inline-block;
+          margin-top: 1rem;
+          padding: 0.75rem 1.5rem;
+          background-color: #0f3460;
+          color: white;
+          text-decoration: none;
+          border-radius: 8px;
+        ">Go to Registration Form</a>
+  </section>
+
+
+  <!-- This is the section for the FAQs -->
+
+  <section class="fade-in" style="padding: 3rem 2rem; max-width: 1000px; margin: auto" id="faq">
+    <h2 style="color: #2f5a2f; font-size: 3.6rem">FAQs</h2>
+    <p>
+      <strong>Do I need to know how to code?</strong> Nope! We welcome
+      beginners and will have mentors on-site to help.
+    </p>
+    <p>
+      <strong>Is this free?</strong> 100% free — just bring your ideas and
+      enthusiasm!
+    </p>
+    <p>
+      <strong>Who can attend?</strong> This event is for PVUSD Students.
+    </p>
+    <p>
+      <strong>What is this Event about?</strong> HackWatsonville is Watsonville High School’s first-ever student-led
+      hackathon — It's a one-day coding competition where creativity meets impact!
+    </p>
+    <p><strong>Do I need an account for this?</strong> Yes, you will need a Google account to register.
+    </p>
+    <p><strong>When is this happening?</strong> 2:15 pm May 16th at Watsonville High: 250 E Beach St, Watsonville, CA.
+      Room: 703.</p>
+    <p>
+      <strong>What if I don't have a team?</strong> No worries! We'll help you
+      find one.
+    </p>
+    <p><strong>Is there an age requirement for this event?</strong>This event is aimed towards high school students, but
+      if you are younger and are interested, please contact us!</p>
+    <p>
+      <strong>What if I have more questions?</strong> Reach out to us at
+      jaredesquivel24@gmail.com
+    </p>
+  </section>
+
+  <!-- This is the section for the contact information -->
+
+  <section class="fade-in" style="padding: 3rem 2rem; max-width: 1000px; margin: auto" id="contact">
+    <div class="contact-container">
+      <div class="contact-text">
+        <h2 style="color: #2f5a2f; font-size: 3.6rem">Contact</h2>
+        <br />
+        <h2><strong>About the Founder</strong></h2>
+        <br />
+        <p style="font-size: 1.3rem">
+          This initiative was launched by <strong>Jared Esquivel,</strong> a senior at Watsonville High, passionate
+          about
+          creating meaningful opportunities for the community and technology and innovation. Inspired by his experience
+          at
+          <strong>Digital NEST,</strong> Jared envisioned an event where youth could innovate, collaborate, and grow
+          their
+          technical skills.
+          <br /><br />
+          Jared is dedicated to fostering a culture of innovation and collaboration, and he is excited to bring this
+          vision
+          to life through the HackWatsonville Hackathon.
+          <strong>Contact Now:</strong>
+          <a href="jaredesquivel24@gmail.com">jaredesquivel24@gmail.com</a>
+        </p>
+        <br />
+        <h2 style="font-size: 1.5rem">Team Support</h2>
+        <p style="font-size: 1.3rem">Special thanks to <strong>Francisco Alanis-Cruz</strong> and <strong>Ms.
+            Holland</strong> for being the test runners and supporters for this project.</p>
+      </div>
+
+      <div class="contact-img">
+        <img src="assets/Jared Photo.jpg" alt="Founder Photo">
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="fade-in" style="
+        background: #1a1a2e;
+        color: white;
+        text-align: center;
+        padding: 2rem;
+      ">
+    <p>&copy; 2025 HackWatsonville. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript for the hamburger menu -->
+
+  <!-- Please do not touch the JavaScript for it is unstable and can break upon revision so please be mindful do not touch whatsoever please I ask you do not touch the JavaScript PLEASE  -->
+
+  <script>
+    function toggleMenu() {
+      const navLinks = document.querySelector("nav ul");
+      navLinks.classList.toggle("active");
+    }
+    document.querySelectorAll("nav ul li a").forEach(link => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+          document.querySelector("nav ul").classList.remove("active");
+        }
+      });
+    });
+
+    // JavaScript for the fade in effect
+
+    function toggleMenu() {
+      const navLinks = document.querySelector("nav ul");
+      navLinks.classList.toggle("active");
+    }
+    document.querySelectorAll("nav ul li a").forEach(link => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+          document.querySelector("nav ul").classList.remove("active");
+        }
+      });
+    });
+
+    // ===== Fade-In Animation Script =====
+    const faders = document.querySelectorAll('.fade-in');
+    const appearOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px"
+    };
+
+    const appearOnScroll = new IntersectionObserver(function (entries, appearOnScroll) {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          return;
+        } else {
+          entry.target.classList.add('show');
+          appearOnScroll.unobserve(entry.target);
+        }
+      });
+    }, appearOptions);
+
+    faders.forEach(fader => {
+      appearOnScroll.observe(fader);
+    });
+
+  </script>
+
+</body>
+
+
+
+</html>
